@@ -1,11 +1,12 @@
 import jwt  from 'jsonwebtoken';
-import dotenv from 'dotenv';
-dotenv.config();
+
+const fs = require('fs');
+const config = JSON.parse(fs.readFileSync('config.json'));
 
 export const generarJWT = ( CONTROL = '', NOMBRE = '', PATERNO = '', CLAVE_LUGAR = '', ROL = '', CLAVE_EMPLEADO = '' ) => {
     return new Promise( ( resolve, reject ) => {
         const payload = { CONTROL, NOMBRE, PATERNO, CLAVE_LUGAR, ROL, CLAVE_EMPLEADO };
-        jwt.sign( payload, process.env.SECRETORPRIVATEKEY || '', {
+        jwt.sign( payload, config.SECRETORPRIVATEKEY || '', {
             expiresIn: '2h'
         }, ( err, token ) => {
             if ( err ) {

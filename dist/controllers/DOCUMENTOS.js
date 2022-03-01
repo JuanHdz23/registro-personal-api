@@ -127,7 +127,6 @@ const putDocumentos = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 FCH_REG: body.FCH_REG,
                 FCH_UAC: body.FCH_UAC,
             };
-            console.log(documento);
             const documentos = new DOCUMENTOS_1.default(documento);
             yield documentos.save();
         }

@@ -15,6 +15,9 @@ import test_Routes from '../routes/test';
 import cors from 'cors';
 import db from '../db/connection';
 
+const fs = require('fs');
+const config = JSON.parse(fs.readFileSync('config.json'));
+
 class Server {
 
     private app: Application;
@@ -37,7 +40,7 @@ class Server {
 
     constructor() {
         this.app = express();
-        this.port = process.env.PORT || '8000';
+        this.port = config.PORT || '8000';
 
         this.dbConnection();
         this.middlewares();

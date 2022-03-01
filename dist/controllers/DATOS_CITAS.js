@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.putCita = exports.postCita = exports.getExpedienteClaveLugar = exports.getCita = exports.getCitas = void 0;
+exports.putCita = exports.postCita = exports.putVigenciaC3 = exports.getExpedienteClaveLugar = exports.getCita = exports.getCitas = void 0;
 const DATOS_CITAS_1 = __importDefault(require("../models/DATOS_CITAS"));
 const ACTIVIDADES_1 = require("../controllers/ACTIVIDADES");
 const getCitas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -65,6 +65,32 @@ const zeroFill = (number, width) => {
     }
     return number + ""; // siempre devuelve tipo cadena
 };
+const putVigenciaC3 = (body) => __awaiter(void 0, void 0, void 0, function* () {
+    const { CLAVE_LUGAR, ANIO, CONTROL, VIGENCIA_C3, USUARIO } = body;
+    try {
+        const cita = yield DATOS_CITAS_1.default.findOne({
+            where: {
+                CLAVE_LUGAR,
+                ANIO,
+                CONTROL
+            }
+        });
+        if (!cita) {
+            return false;
+        }
+        const fecha = new Date();
+        const vigencia = {
+            VIGENCIA_C3,
+            USUARIO,
+            FCH_UAC: fecha
+        };
+        yield cita.update(vigencia);
+    }
+    catch (error) {
+        return error;
+    }
+});
+exports.putVigenciaC3 = putVigenciaC3;
 const postCita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
@@ -124,7 +150,6 @@ exports.postCita = postCita;
 const putCita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { CLAVE_LUGAR, ANIO, CONTROL, USUARIO } = req.params;
     const { body } = req;
-    console.log(body);
     try {
         const cita = yield DATOS_CITAS_1.default.findOne({
             where: {
@@ -138,14 +163,6 @@ const putCita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 msg: `No existe información con el CONTROL ${CONTROL}`
             });
         }
-        // if ( body.FECHA_CITA ) {
-        //     const fecha_cita = body.FECHA_CITA + ':00';
-        //     body.FECHA_CITA = fecha_cita;
-        // }
-        // if ( body.FECHA_APERTURA ) {
-        //     const fecha_apertura = body.FECHA_APERTURA + ':00';
-        //     body.FECHA_APERTURA = fecha_apertura;
-        // }
         yield cita.update(body);
         body.CLAVE_LUGAR = CLAVE_LUGAR;
         body.ANIO = ANIO;

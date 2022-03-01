@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPuestos = void 0;
 const CATALOGO_PUESTOS_1 = __importDefault(require("../models/CATALOGO_PUESTOS"));
 const getPuestos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.params);
     const { ADSCRIPCION } = req.params;
     const puestos = yield CATALOGO_PUESTOS_1.default.findAll({
         where: {

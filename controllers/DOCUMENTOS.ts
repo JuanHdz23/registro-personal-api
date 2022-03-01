@@ -142,7 +142,6 @@ export const putDocumentos = async( req: Request, res: Response ) => {
                 FCH_UAC: body.FCH_UAC,
             };
 
-            console.log(documento);
             const documentos = new (DOCUMENTOS as any)( documento );
             await documentos.save();
         }

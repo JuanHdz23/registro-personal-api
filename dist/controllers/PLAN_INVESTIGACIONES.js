@@ -42,8 +42,6 @@ const getPlanInvestigacion = (req, res) => __awaiter(void 0, void 0, void 0, fun
 exports.getPlanInvestigacion = getPlanInvestigacion;
 const postPlanInvestigacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    console.log(body);
-    console.log(body.CLAVE_LUGAR, body.ANIO, body.CONTROL);
     try {
         if (body.CLAVE_LUGAR && body.ANIO && body.CONTROL) {
             const existePlanInvestigacion = yield PLAN_INVESTIGACION_1.default.findOne({

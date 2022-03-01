@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import RNPSP2 from '../models/RNPSP';
 import { postActividades } from '../controllers/ACTIVIDADES';
-import bcrypt  from 'bcrypt';
+import { putVigenciaC3 } from '../controllers/DATOS_CITAS';
 
 export const getRnpspId = async( req: Request, res: Response ) => {
 
@@ -48,8 +48,13 @@ export const postRnpsp = async( req: Request, res: Response ) => {
         const RNPSP = new (RNPSP2 as any)( body );
         await RNPSP.save();
 
+        if ( body.CUIP ) {
+            body.VIGENCIA_C3 = '1';
+            putVigenciaC3( body );
+        }
+
         const actividad = 'Se creo registro de RNPSP';
-        postActividades(body, actividad);
+        postActividades (body, actividad );
 
         res.json({
             RNPSP
@@ -83,11 +88,16 @@ export const putRnpsp = async( req: Request, res: Response ) => {
         }
 
         await rnpsp.update( body );
-
+        
         body.CLAVE_LUGAR = CLAVE_LUGAR;
         body.ANIO = ANIO;
         body.CONTROL = CONTROL;
         body.USUARIO = USUARIO;
+        
+        if ( body.CUIP ) {
+            body.VIGENCIA_C3 = '1';
+            putVigenciaC3( body );
+        }
 
         const actividad = 'Se modifico registro de rnpsp';
         postActividades(body, actividad);

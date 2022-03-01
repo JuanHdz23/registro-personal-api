@@ -64,6 +64,38 @@ const zeroFill = ( number: any, width: any ) => {
     return number + ""; // siempre devuelve tipo cadena
 };
 
+export const putVigenciaC3 = async( body: any ) => {
+
+    const { CLAVE_LUGAR, ANIO, CONTROL, VIGENCIA_C3, USUARIO } = body;
+
+    try {
+        const cita = await DATOS_CITA.findOne({
+            where: {
+                CLAVE_LUGAR,
+                ANIO,
+                CONTROL
+            }
+        });
+
+        if( !cita ) {
+            return false;
+        }
+
+        const fecha = new Date();
+
+        const vigencia = {
+            VIGENCIA_C3,
+            USUARIO,
+            FCH_UAC: fecha
+        }
+
+        await cita.update( vigencia );
+
+    } catch (error) {
+        return error;
+    }
+};
+
 export const postCita = async( req: Request, res: Response ) => {
 
     const { body } = req;
@@ -133,8 +165,6 @@ export const putCita = async( req: Request, res: Response ) => {
     const { CLAVE_LUGAR, ANIO, CONTROL, USUARIO } = req.params;
     const { body } = req;
 
-    console.log(body);
-
     try {
         const cita = await DATOS_CITA.findOne({
             where: {
@@ -149,16 +179,6 @@ export const putCita = async( req: Request, res: Response ) => {
                 msg: `No existe información con el CONTROL ${ CONTROL }`
             });
         }
-
-        // if ( body.FECHA_CITA ) {
-        //     const fecha_cita = body.FECHA_CITA + ':00';
-        //     body.FECHA_CITA = fecha_cita;
-        // }
-
-        // if ( body.FECHA_APERTURA ) {
-        //     const fecha_apertura = body.FECHA_APERTURA + ':00';
-        //     body.FECHA_APERTURA = fecha_apertura;
-        // }
 
         await cita.update( body );
 

@@ -22,8 +22,6 @@ const getExpedientes = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getExpedientes = getExpedientes;
 const getExpediente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req);
-    console.log(req.params);
     const { CLAVE_LUGAR, ANIO, CONTROL } = req.params;
     const expediente = yield DATOS_EXPEDIENTE_1.default.findOne({
         where: {

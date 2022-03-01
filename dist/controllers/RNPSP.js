@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.putRnpsp = exports.postRnpsp = exports.getRnpspId = void 0;
 const RNPSP_1 = __importDefault(require("../models/RNPSP"));
 const ACTIVIDADES_1 = require("../controllers/ACTIVIDADES");
+const DATOS_CITAS_1 = require("../controllers/DATOS_CITAS");
 const getRnpspId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { CLAVE_LUGAR, ANIO, CONTROL } = req.params;
     const rnpsp = yield RNPSP_1.default.findAll({
@@ -49,6 +50,10 @@ const postRnpsp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         body.FCH_UAC = date;
         const RNPSP = new RNPSP_1.default(body);
         yield RNPSP.save();
+        if (body.CUIP) {
+            body.VIGENCIA_C3 = '1';
+            DATOS_CITAS_1.putVigenciaC3(body);
+        }
         const actividad = 'Se creo registro de RNPSP';
         ACTIVIDADES_1.postActividades(body, actividad);
         res.json({
@@ -84,6 +89,10 @@ const putRnpsp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         body.ANIO = ANIO;
         body.CONTROL = CONTROL;
         body.USUARIO = USUARIO;
+        if (body.CUIP) {
+            body.VIGENCIA_C3 = '1';
+            DATOS_CITAS_1.putVigenciaC3(body);
+        }
         const actividad = 'Se modifico registro de rnpsp';
         ACTIVIDADES_1.postActividades(body, actividad);
         res.json({
